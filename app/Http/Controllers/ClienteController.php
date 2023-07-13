@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\ClienteModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\Validator;
 
 class ClienteController extends Controller
 {
@@ -26,19 +28,18 @@ class ClienteController extends Controller
      */
     public function create(Request $request)
     {
-            $id = $request['id'];
-            $name = $request['name'];
-            $dob = $request['dob'];
-            $phone = $request['phone'];
-            $email = $request['email'];
-            $address = $request['address'];
-            $payments = $request['payments'];
-            $payments = json_encode($payments);
-            
-            $data = DB::select("CALL crear_cliente(?, ?, ?, ?, ?, ?, ?)", [$id, $name, $dob, $phone, $email, $address, $payments]);
-            //return $payments;
-            return response()->json(['message' => 'Cliente creado exitosamente']);
-        
+        $id = $request['id'];
+        $name = $request['name'];
+        $dob = $request['dob'];
+        $phone = $request['phone'];
+        $email = $request['email'];
+        $address = $request['address'];
+        $payments = $request['payments'];
+        $payments = json_encode($payments);
+
+        $data = DB::select("CALL crear_cliente(?, ?, ?, ?, ?, ?, ?)", [$id, $name, $dob, $phone, $email, $address, $payments]);
+        //return $payments;
+        return response()->json(['message' => 'Cliente creado exitosamente']);
     }
 
     /**
@@ -49,7 +50,6 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        
     }
 
     /**
@@ -92,9 +92,11 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-     
-    public function eliminar(Request $request, $clienteId){
-        try{$data = DB::select("CALL Eliminar(?)", [$clienteId]);
+
+    public function eliminar(Request $request, $clienteId)
+    {
+        try {
+            $data = DB::select("CALL Eliminar(?)", [$clienteId]);
             // Puedes devolver una respuesta adecuada, como un mensaje de éxito o redireccionar a otra página
             return response()->json(['message' => 'Cliente eliminado correctamente']);
         } catch (Exception $e) {
@@ -102,8 +104,10 @@ class ClienteController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    public function eliminarpago(Request $request, $COD){
-        try{$data = DB::select("CALL eliminar_pago(?)", [$COD]);
+    public function eliminarpago(Request $request, $COD)
+    {
+        try {
+            $data = DB::select("CALL eliminar_pago(?)", [$COD]);
             // Puedes devolver una respuesta adecuada, como un mensaje de éxito o redireccionar a otra página
             return response()->json(['message' => 'Cliente eliminado correctamente']);
         } catch (Exception $e) {
@@ -112,10 +116,12 @@ class ClienteController extends Controller
         }
     }
 
-    public function buscar(Request $request, $clienteId){
-        try{$data = DB::select("CALL buscar_cliente(?)", [$clienteId]);
+    public function buscar(Request $request, $clienteId)
+    {
+        try {
+            $data = DB::select("CALL buscar_cliente(?)", [$clienteId]);
             // Puedes devolver una respuesta adecuada, como un mensaje de éxito o redireccionar a otra página
-            if(count($data) > 0){
+            if (count($data) > 0) {
                 $data[0]->payments = json_decode($data[0]->payments);
             }
             return $data;
@@ -124,8 +130,10 @@ class ClienteController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    public function buscarMonto(Request $request, $clienteId){
-        try{$data = DB::select("CALL buscarmonto(?)", [$clienteId]);
+    public function buscarMonto(Request $request, $clienteId)
+    {
+        try {
+            $data = DB::select("CALL buscarmonto(?)", [$clienteId]);
             // Puedes devolver una respuesta adecuada, como un mensaje de éxito o redireccionar a otra página
             return $data;
         } catch (Exception $e) {
